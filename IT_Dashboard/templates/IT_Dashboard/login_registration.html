@@ -1,0 +1,266 @@
+{% load staticfiles %}
+<link href="{% static 'IT_Dashboard/css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'IT_Dashboard/font-awesome/css/font-awesome.css' %}" rel="stylesheet">
+
+<link href="{% static 'IT_Dashboard/css/animate.css' %}" rel="stylesheet">
+<link href="{% static 'IT_Dashboard/css/style.css' %}" rel="stylesheet">
+<link href="{% static 'IT_Dashboard/css/main.css' %}" rel="stylesheet">
+<link href="{% static 'IT_Dashboard/css/responsive.css' %}" rel="stylesheet">
+
+<style type="text/css">
+	body {
+    padding-top: 90px;
+}
+.panel-login {
+	border-color: #ccc;
+	-webkit-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+	-moz-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+	box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+}
+.panel-login>.panel-heading {
+	color: #00415d;
+	background-color: #fff;
+	border-color: #fff;
+	text-align:center;
+}
+.panel-login>.panel-heading a{
+	text-decoration: none;
+	color: #666;
+	font-weight: bold;
+	font-size: 15px;
+	-webkit-transition: all 0.1s linear;
+	-moz-transition: all 0.1s linear;
+	transition: all 0.1s linear;
+}
+.panel-login>.panel-heading a.active{
+	color: #029f5b;
+	font-size: 18px;
+}
+.panel-login>.panel-heading hr{
+	margin-top: 10px;
+	margin-bottom: 0px;
+	clear: both;
+	border: 0;
+	height: 1px;
+	background-image: -webkit-linear-gradient(left,rgba(0, 0, 0, 0),rgba(0, 0, 0, 0.15),rgba(0, 0, 0, 0));
+	background-image: -moz-linear-gradient(left,rgba(0,0,0,0),rgba(0,0,0,0.15),rgba(0,0,0,0));
+	background-image: -ms-linear-gradient(left,rgba(0,0,0,0),rgba(0,0,0,0.15),rgba(0,0,0,0));
+	background-image: -o-linear-gradient(left,rgba(0,0,0,0),rgba(0,0,0,0.15),rgba(0,0,0,0));
+}
+.panel-login input[type="text"],.panel-login input[type="email"],.panel-login input[type="password"] {
+	height: 45px;
+	border: 1px solid #ddd;
+	font-size: 16px;
+	-webkit-transition: all 0.1s linear;
+	-moz-transition: all 0.1s linear;
+	transition: all 0.1s linear;
+}
+.panel-login input:hover,
+.panel-login input:focus {
+	outline:none;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+	border-color: #ccc;
+}
+.btn-login {
+	background-color: #59B2E0;
+	outline: none;
+	color: #fff;
+	font-size: 14px;
+	height: auto;
+	font-weight: normal;
+	padding: 14px 0;
+	text-transform: uppercase;
+	border-color: #59B2E6;
+}
+.btn-login:hover,
+.btn-login:focus {
+	color: #fff;
+	background-color: #53A3CD;
+	border-color: #53A3CD;
+}
+.forgot-password {
+	text-decoration: underline;
+	color: #888;
+}
+.forgot-password:hover,
+.forgot-password:focus {
+	text-decoration: underline;
+	color: #666;
+}
+
+.btn-register {
+	background-color: #1CB94E;
+	outline: none;
+	color: #fff;
+	font-size: 14px;
+	height: auto;
+	font-weight: normal;
+	padding: 14px 0;
+	text-transform: uppercase;
+	border-color: #1CB94A;
+}
+.btn-register:hover,
+.btn-register:focus {
+	color: #fff;
+	background-color: #1CA347;
+	border-color: #1CA347;
+}
+
+img#bg {
+  /* Set rules to fill background */
+  min-height: 100%;
+  min-width: 1024px;
+
+  /* Set up proportionate scaling */
+  width: 100%;
+  height: auto;
+
+  /* Set up positioning */
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+</style>
+<img src="{% static 'It_Dashboard/img/tpac_4.jpg' %}" id="bg" alt="" style="width:100%; margin-top:-28px;"> 
+<div class="container">
+    	<div class="row">
+			<div class="col-md-6 col-md-offset-3">
+				<div class="panel panel-login">
+					<div class="panel-heading">
+						<div class="row">
+							<div class="col-xs-6">
+								<a href="#" class="active" id="login-form-link">Login</a>
+							</div>
+							<div class="col-xs-6">
+								<a href="#" id="register-form-link">Register</a>
+							</div>
+						</div>
+						<hr>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-lg-12">
+			
+								<form id="login-form" action="{% url 'it:login' %}" method="post"  style="display: block;" enctype="multipart/form-data">
+									{% csrf_token %}
+									{% if error_message %}
+ 									<p><strong>{{ error_message }}</strong></p>
+ 									{% endif %} 																
+			 						<div class="form-group">
+				 						<input type="text" name="username" tabindex="1" class="form-control" placeholder="Username" autofocus="" id="id_username" maxlength="254" required="">
+									</div>
+									<div class="form-group">
+										<input name="password" type="password" tabindex="2" class="form-control" placeholder="Password รหัสผ่าน" required="">
+									</div>
+									<div class="form-group text-center">
+										<input type="checkbox" tabindex="3" class="" name="remember" id="remember">
+										<label for="remember"> Remember Me</label>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-sm-6 col-sm-offset-3">
+												<input type="submit" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-login" value="Log In">
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-lg-12">
+												<div class="text-center">
+													<a href="{% url 'it:change_password' %}" tabindex="5" class="forgot-password">Forgot Password?</a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</form>
+		
+								<form id="register-form" action="{% url 'it:register' %}" method="post" role="form" style="display: none;" enctype="multipart/form-data">
+								<h1 style="text-align:center">Welcome to TPAC User Registration Page </h1>
+						        <h3 style="text-align:center">Register with your ECONS credentials and TPAC email</h3>
+								{% csrf_token %}
+								{% if error_message %}
+						            <p><strong>{{ error_message }}</strong></p>
+						        {% endif %}							
+ 								{% for field in form %}
+ 									{% if field.errors %}
+ 									{{ forloop.counter }} )	{{ field.label_tag }} has a problem <br />
+ 									{{field.errors }}
+ 									{% endif %}
+								{% endfor %}
+									<div class="row">
+										<div class="col-xs-6">
+											<div class="form-group">
+												<input autofocus="" class="vTextField form-control" id="id_first_name" maxlength="150" name="first_name" type="text" required="" tabindex="1" placeholder="First Name  ชื่อภาษาอังกฤษ" value="">
+											</div>
+										</div>
+										<div class="col-xs-6">
+											<div class="form-group">
+												<input autofocus="" class="vTextField form-control" id="id_last_name" maxlength="150" name="last_name" type="text" required="" tabindex="1" placeholder="Last Name  นามสกุลภาษาอังกฤษ" value="">
+											</div>
+										</div>										
+									</div>
+									
+									<div class="form-group">
+									<input autofocus="" class="vTextField form-control" id="id_username" maxlength="150" name="username" type="text" required="" tabindex="1" placeholder="Username" value="">
+									</div>
+									<div class="form-group">
+										<input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email Address อีเมล__@thaiplaspac.com ของคุณ" value="">
+									</div>
+									<div class="form-group">
+										<input  name="password" type="password" required="" tabindex="2" 	class="form-control" placeholder="Password รหัสผ่าน">
+									</div>
+									<div class="form-group">
+										<input name="password2" type="password" required="" tabindex="2" class="form-control" placeholder="Confirm Password ยืนยันรหัสผ่าน">
+									</div> 
+				                <br>             
+								<div class="form-group">
+									<div class="row">
+										<div class="col-sm-8 col-sm-offset-2" align="center">
+											<input type="submit" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-register" value="Register Now">
+										</div>
+									</div>
+								</div>
+							</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+        
+         <script src="{% static 'IT_Dashboard/js/jquery-2.1.1.js' %}"></script>
+        <script src="{% static 'IT_Dashboard/js/jquery-ui.custom.min.js' %}"></script>
+        <script src="{% static 'IT_Dashboard/js/jquery-ui-1.10.4.min.js' %}"></script>
+        <script src="{% static 'IT_Dashboard/js/bootstrap.min.js' %}"></script>
+
+
+<script>
+	$(function() {
+
+    $('#login-form-link').click(function(e) {
+		$("#login-form").delay(100).fadeIn(100);
+ 		$("#register-form").fadeOut(100);
+		$('#register-form-link').removeClass('active');
+		$(this).addClass('active');
+		e.preventDefault();
+	});
+	$('#register-form-link').click(function(e) {
+		$("#register-form").delay(100).fadeIn(100);
+ 		$("#login-form").fadeOut(100);
+		$('#login-form-link').removeClass('active');
+		$(this).addClass('active');
+		e.preventDefault();
+	});
+
+	$('#login-form').on('submit', function(e){
+        console.log($('#username').val());
+        console.log($('#password').val());
+    });
+	
+});
+
+</script>

@@ -1,0 +1,61 @@
+{% extends 'IT_Dashboard/base.html' %}
+
+{% block title %}Introduction Form{% endblock %}
+
+{% block body %}
+{% load staticfiles %}
+{% load tpac%}
+<style>
+img#bg {
+  /* Set rules to fill background */
+  min-height: 100%;
+  min-width: 1024px;
+
+  /* Set up proportionate scaling */
+  width: 100%;
+  height: auto;
+
+  /* Set up positioning */
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+</style>
+<img src="{% static 'IT_Dashboard/img/tpac_2.jpg' %}" id="bg" alt="" style="width:100%; margin-top:-28px;">	
+<div style="margin-top:80px"></div>
+ <div class="container-fluid center-block" >
+        <div class="row">
+            <div class="col-sm-1">
+              
+            </div>
+            <div class="col-sm-9 animated fadeInUp">
+            <div class="mail-box-header">
+                <div class="pull-right tooltip-demo">
+                    <a href="{% url 'it:dash' %}" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Discard form"><i class="fa fa-times"></i> Discard</a>
+                </div>
+                <h1 style="text-align:center">Hello {{user.username}} </h1>
+                <h3 style="text-align:center">Add Introduction Here</h3>
+            </div>
+                <div class="mail-box">
+                  {% if error_message %}
+                    <p><strong>{{ error_message }}</strong></p>
+                  {% endif %}
+                <div class="mail-body">
+                    <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      {% include 'IT_Dashboard/form-template.html' %}               
+
+                      <div class="mail-body text-right tooltip-demo">
+                      <button type="submit" class="btn btn-success"><i class="fa fa-floppy-o"></i> Submit</button> 
+                    </div>
+                    </form>
+                </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+
+ </div>	
+ {% endblock %}
+

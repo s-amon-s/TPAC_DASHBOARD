@@ -1,0 +1,87 @@
+{% extends 'IT_Dashboard/dashboard_base.html' %}
+{% block title %}ProWide | HOME {% endblock %}
+
+{% block body %}
+{% load staticfiles %}
+<link href="{% static 'IT_Dashboard/css/component.css' %}" rel="stylesheet">
+<style type="text/css">
+.alert-tpac{
+    background:#428bca;
+    color: white;
+}
+</style>
+    
+    <div style="margin:20px 50px"> </div>
+    <div class="col-sm-3"> </div>
+    <div class="col-sm-6 alert alert-tpac" style="position:relative;" align="center">
+        <img class="img-responsive" src="{% static 'IT_Dashboard/img/logo.png' %}" alt="thai plaspac logo">
+         <h2 style="color:#2f4050"><strong> {{ profile.full_name}}</strong></h2>
+         <h4> - Get familiar with tasks and troubshoot common problems
+         </h4>
+         <h4> - Get familiar with bussiness flow and ERP flow
+         </h4>
+         <h4> - Manage To-Do list
+         </h4>
+         <h2> - Ask about Cycloramic, and Asset Tracking, (We can just do Track my phone)
+         </h2>
+    </div>
+    <!-- <div id="prowide">       -->
+    <section>
+        <!-- <div class="container" align="center" style="margin-top:18%;"> -->
+            <div id="sb-search" class="sb-search">
+                <form>
+                    <input class="sb-search-input" placeholder="Enter your search term..." type="search" value="" name="search" id="search">
+                    <input class="sb-search-submit" type="submit" value="">
+                    <span class="sb-icon-search"></span>
+                </form>
+            </div>
+    <!-- </div> -->
+    </section>
+    <div class="wrapper wrapper-content">
+            <div class="row animated fadeInRight">
+                <div class="col-md-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>
+                                <strong>
+                                    {{ profile.nickname}}
+                                </strong>'s Personilized Work Portfolio
+                            </h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                                <a class="close-link">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div>
+                            <input type="hidden" name="personalized-timeline" id="personalized-timeline" value="{{profile.daily_task_timeline}}">
+                           <div id='timeline-embed' style="width:100%; height: 600px;"  style="display:none"></div> 
+                    </div>
+                </div>
+                </div>
+
+            </div>
+    </div>
+
+<!-- <iframe frameborder=0 scrolling=no width="200" height="200" src="http://weblink.settrade.com/IRPage/irpage.jsp?txtSymbol=TPAC&language=en&key=28712"></iframe>
+ -->
+<!-- </div> -->
+<script>
+            $(document).ready(function() {
+                new UISearch(document.getElementById('sb-search'));
+                $('html, body').animate({
+                scrollTop: $("#timeline-embed").offset().top
+                }, 1500);
+                var options = {
+                        hash_bookmark: true,
+                        default_bg_color:'#f2d8a5',
+                        timenav_position:'bottom',
+                        initial_zoom: 12
+                    };
+                timeline = new TL.Timeline('timeline-embed',$('#personalized-timeline').val(),options);
+            });
+</script>
+{% endblock%}

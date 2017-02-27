@@ -1,0 +1,58 @@
+{% extends 'IT_Dashboard/category_base.html' %}
+{% block title %}TPAC | HOME {% endblock %}
+{% block body %}
+{% load staticfiles %}
+<link title="timeline-styles" rel="stylesheet" href="https://cdn.knightlab.com/libs/timeline3/latest/css/timeline.css">
+<script src="https://cdn.knightlab.com/libs/timeline3/latest/js/timeline.js"></script>
+<style>
+img#bg {
+  /* Set rules to fill background */
+  min-height: 100%;
+  min-width: 1024px;
+  /* Set up proportionate scaling */
+  width: 100%;
+  height: auto;
+  /* Set up positioning */
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+</style>
+
+{% if category.background %}
+	<img src="{{ category.background.url }}" id="bg" alt="" style="width:100%; margin-top:-28px;">
+{% else %}
+	<img src="{{category.background_url}}" id="bg" alt="" style="width:100%; margin-top:-28px;">
+{% endif %}
+	<section>
+			<div id="sb-search" class="sb-search">
+				<form>
+					<input class="sb-search-input" placeholder="Enter your search term..." type="search" value="" name="search" id="search">
+					<input class="sb-search-submit" type="submit" value="">
+					<span class="sb-icon-search"></span>
+				</form>
+			</div>
+	</section>
+
+	<div style="margin-top:80px"></div>
+<div id='timeline-embed' style="width: 100%; height: 600px"></div>
+	
+ <script type="text/javascript">
+
+ $.ajax({
+    url: "/it/get/content/",
+    dataType : 'json',
+	type: "GET",
+   	success: function(data){
+   		for (var i = data.length - 1; i >= 0; i--) {
+   			console.log(data[i]["fields"]["joined_tpac"])
+   		}
+   		timeline = new TL.Timeline('timeline-embed',
+        'https://docs.google.com/spreadsheets/d/1cWqQBZCkX9GpzFtxCWHoqFXCHg-ylTVUWlnrdYMzKUI/pubhtml');
+    }
+});
+
+      
+  </script>
+
+{% endblock %}

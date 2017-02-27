@@ -1,0 +1,39 @@
+{% extends 'IT_Dashboard/base.html' %}
+
+{% block title %}Supplier Profile{% endblock %}
+
+{% block body %}
+{% load staticfiles %}
+<style>
+img#bg {
+  /* Set rules to fill background */
+  min-height: 100%;
+  min-width: 1024px;
+
+  /* Set up proportionate scaling */
+  width: 100%;
+  height: auto;
+
+  /* Set up positioning */
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+</style>
+
+
+<style type="text/css">
+.alert-tpac{
+    background:#428bca;
+    color: white;
+}
+</style>
+    <div style="margin:20px 50px"> </div>
+    <div class="col-sm-3"> </div>
+    <div class="col-sm-6 alert alert-tpac" style="position:relative;" align="center">
+        <img class="img-responsive" src="{% static 'IT_Dashboard/img/logo.png' %}" alt="thai plaspac logo">
+         <h1 style="color:#2f4050"><strong> :( Seems you are not logged in</strong></h1>
+    </div>
+
+{%endblock%}

@@ -1,0 +1,22 @@
+{% extends 'IT_Dashboard/category_base.html' %}
+{% block title %}TPAC | HOME {% endblock %}
+{% block body %}
+{% load staticfiles %}
+
+	<div style="margin-top:80px"></div>
+
+	<center class="tt-wrapper">
+		<a href="{% url 'it:intro' category.pk %}" class="hvr-float-shadow">
+			<img src="{% static 'IT_Dashboard/img/introduction.jpg' %}" alt="" class="menu img-circle" width="400"  style="position: relative; top: 0; left: 0; margin-top:150px;">
+		</a>
+		<a href="{% url 'it:task' category.pk %}" class="hvr-float-shadow">
+			<img src="{% static 'IT_Dashboard/img/tasks.jpg' %}" alt="" class="menu img-circle" width="400"  style="position: relative; top: 0; left: 0; margin-top:150px;">
+		</a>
+		<a href="{% url 'it:trouble' category.pk %}" class="hvr-float-shadow">
+			<img src="{% static 'IT_Dashboard/img/troubleshoot.jpg' %}" alt="" class="menu img-circle" width="400"  style="position: relative; top: 0; left: 0; margin-top:150px;">
+		</a>
+	</center>
+
+
+
+{% endblock %}

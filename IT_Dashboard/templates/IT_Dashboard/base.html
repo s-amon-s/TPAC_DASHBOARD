@@ -1,0 +1,116 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title> {% block title %}TPAC | Thai Plaspac{% endblock %}</title>
+<head>
+<!-- Loads the path to the static files -->
+        {% load staticfiles %}
+        {% load tpac %}
+<link href="{% static 'IT_Dashboard/css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'IT_Dashboard/font-awesome/css/font-awesome.css' %}" rel="stylesheet">
+
+<link href="{% static 'IT_Dashboard/css/plugins/iCheck/custom.css' %}" rel="stylesheet">
+<link href="{% static 'IT_Dashboard/css/plugins/summernote/summernote.css' %}" rel="stylesheet">
+<link href="{% static 'IT_Dashboard/css/plugins/codemirror/codemirror.css' %}" rel="stylesheet">
+<link href="{% static 'IT_Dashboard/css/plugins/summernote/summernote-bs3.css' %}" rel="stylesheet">
+
+<link href="{% static 'IT_Dashboard/css/animate.css' %}" rel="stylesheet">
+<link href="{% static 'IT_Dashboard/css/style.css' %}" rel="stylesheet">
+<link href="{% static 'IT_Dashboard/css/main.css' %}" rel="stylesheet">
+<link href="{% static 'IT_Dashboard/css/responsive.css' %}" rel="stylesheet">
+<link href="{% static 'IT_Dashboard/css/component.css' %}" rel="stylesheet">
+<link href="{% static 'IT_Dashboard/css/tooltip.css' %}" rel="stylesheet">
+
+
+<style>
+    .navbar-inverse{
+        border-color:brown;
+        background-color:#57506b; 
+    }
+    
+</style>
+
+</head>
+
+<body class="top-navigation">
+
+   <div id="wrapper">
+        <div id="page-wrapper" class="gray-bg">
+            <div class="row border-bottom white-bg">
+            <nav class="navbar navbar-inverse" role="navigation">
+                <div class="navbar-header">
+                    <button aria-controls="navbar" aria-expanded="false" data-target="#navbar" data-toggle="collapse" class="navbar-toggle collapsed" type="button">
+                        <i class="fa fa-reorder"></i>
+                    </button>
+                    <a href="/" class="navbar-brand">TPAC</a>
+                </div>
+            </nav>
+
+            </div>
+            
+{% block body %}
+{% endblock %}
+
+            <div class="footer">
+                <div>
+                    <strong>Copyright</strong> AMON &copy; 2016-2017
+                </div>
+            </div>
+            </div>
+        </div>
+        
+        <script src="{% static 'IT_Dashboard/js/jquery-2.1.1.js' %}"></script>
+        <script src="{% static 'IT_Dashboard/js/jquery-ui.custom.min.js' %}"></script>
+        <script src="{% static 'IT_Dashboard/js/jquery-ui-1.10.4.min.js' %}"></script>
+        <script src="{% static 'IT_Dashboard/js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'IT_Dashboard/js/plugins/metisMenu/jquery.metisMenu.js' %}"></script>
+        <script src="{% static 'IT_Dashboard/js/plugins/slimscroll/jquery.slimscroll.min.js' %}"></script>
+        <script src="{% static 'IT_Dashboard/js/inspinia.js' %}"></script>
+        <script src="{% static 'IT_Dashboard/js/plugins/pace/pace.min.js' %}"></script>
+        <script src="{% static 'IT_Dashboard/js/plugins/iCheck/icheck.min.js' %}"></script>
+         <script src="{% static 'IT_Dashboard/js/plugins/codemirror/codemirror.js' %}"></script>
+        <script src="{% static 'IT_Dashboard/js/plugins/summernote/summernote.min.js' %}"></script>
+
+        <script>
+        $(document).ready(function(){
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+
+
+            $('.summernote').summernote();
+
+        });
+        var edit = function() {
+            $('.click2edit').summernote({focus: true});
+        };
+        var save = function() {
+            var aHTML = $('.click2edit').code(); //save HTML If you need(aHTML: array).
+            $('.click2edit').destroy();
+        };
+
+        if (document.getElementById('id_user') != null) {
+            document.getElementById('id_user').style.visibility = "hidden";
+            var labels = document.getElementsByTagName('LABEL');
+            for (var i = 0; i < labels.length; i++) {
+                if (labels[i].htmlFor == 'id_user'){
+                     labels[i].style.visibility = "hidden";
+                }
+            }
+            document.getElementById('id_user').value = document.getElementById('tpac_user_id').value;
+        }
+        if (document.getElementById('id_category') != null) {
+            // document.getElementById('id_category').style.visibility = "hidden";
+            // var labels = document.getElementsByTagName('LABEL');
+            // for (var i = 0; i < labels.length; i++) {
+            //     if (labels[i].htmlFor == 'id_user'){
+            //          labels[i].style.visibility = "hidden";
+            //     }
+            // }
+            // document.getElementById('id_category').value = document.getElementById('tpac_category_id').value;
+        }
+    </script>
+    </body>
+</html>

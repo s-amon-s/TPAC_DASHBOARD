@@ -1,0 +1,176 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title> {% block title %}TPAC | Thai Plaspac{% endblock %}</title>
+<head>
+<!-- Loads the path to the static files -->
+        {% load staticfiles %}
+<link href="{% static 'IT_Dashboard/css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'IT_Dashboard/font-awesome/css/font-awesome.css' %}" rel="stylesheet">
+<link href="{% static 'IT_Dashboard/css/animate.css' %}" rel="stylesheet">
+<link href="{% static 'IT_Dashboard/css/style.css' %}" rel="stylesheet">
+<link href="{% static 'IT_Dashboard/css/main.css' %}" rel="stylesheet">
+<link href="{% static 'IT_Dashboard/css/responsive.css' %}" rel="stylesheet">
+<link href="{% static 'IT_Dashboard/css/component.css' %}" rel="stylesheet">
+<link href="{% static 'IT_Dashboard/css/tooltip.css' %}" rel="stylesheet">
+<script src="{% static 'IT_Dashboard/js/jquery-2.1.1.js' %}"></script>
+<script src="{% static 'IT_Dashboard/js/bootstrap.min.js' %}"></script>
+<link title="timeline-styles" rel="stylesheet" href="https://cdn.knightlab.com/libs/timeline3/latest/css/timeline.css">
+<link title="timeline-styles" rel="stylesheet" href="https://cdn.knightlab.com/libs/timeline3/latest/css/fonts/font.playfair.css">
+<script src="https://cdn.knightlab.com/libs/timeline3/latest/js/timeline.js"></script>
+<script src="{% static 'IT_Dashboard/js/classie.js' %}"></script>
+<script src="{% static 'IT_Dashboard/js/uisearch.js' %}"></script>
+   
+<style>
+    .top-navigation .nav > li > a {
+        padding: 15px 20px;
+        color: #e7eaec;
+    }
+    img#bg {
+      /* Set rules to fill background */
+      min-height: 100%;
+      min-width: 1024px;
+      /* Set up proportionate scaling */
+      width: 100%;
+      height: auto;
+      /* Set up positioning */
+      position: fixed;
+      top: 0;
+      left: 0;
+    }
+</style>
+</head>
+
+
+<body class="top-navigation">
+    <div id="wrapper">
+        <div id="page-wrapper" class="gray-bg">
+            <div class="row border-bottom white-bg">
+                <nav class="navbar navbar-static-top" role="navigation">
+                    <div class="navbar-header">
+                        <button aria-controls="navbar" aria-expanded="false" data-target="#navbar" data-toggle="collapse" class="navbar-toggle collapsed" type="button">
+                        <i class="fa fa-reorder"></i>
+                        </button>
+                        <a href="{% url 'it:dash' %}" class="navbar-brand" style="background-color:#ff6501;">
+                            <img class="img-responsive" src="{% static 'IT_Dashboard/img/logo.png' %}" alt="thai plaspac logo" style="max-width: 200px; max-height: 40px;">
+                        </a>
+                    </div>
+                    <div class="navbar-collapse collapse tpac-blue" id="navbar">
+                        <ul class="nav navbar-nav">
+                            <li class="tpac-orange">
+                          
+                            </li>
+                            <li class="dropdown">
+                                <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> Category <span class="caret"></span></a>
+                                <ul role="menu" class="dropdown-menu" >
+                                    {% for type in categorys %}
+                                        {% if type.pk == category.pk %}
+                                            <li class="active"> 
+                                        {% else %}
+                                            <li>
+                                        {%endif%}
+                                                <a href="{% url 'it:category-type' type.pk %}">
+                                                    {{type.name}}
+                                                    <img src="{{type.image.url}}" alt="" class="img-responsive" width="50" height="30" style="display: inline;">   
+                                                </a>
+                                            </li>
+                                    {%endfor%}
+                                </ul>
+                            </li>
+<!--                             <li class="dropdown" >
+                                <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> Menu item <span class="caret"></span></a>
+                                <ul role="menu" class="dropdown-menu" style="background-color:#42b7ca;">
+                                    <li><a href="" >Menu item</a></li>
+                                    <li><a href="">Menu item</a></li>
+                                    <li><a href="">Menu item</a></li>
+                                    <li><a href="">Menu item</a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> Menu item <span class="caret"></span></a>
+                                <ul role="menu" class="dropdown-menu" style="background-color:#42b7ca;">
+                                    <li><a href="">Menu item</a></li>
+                                    <li><a href="">Menu item</a></li>
+                                    <li><a href="">Menu item</a></li>
+                                    <li><a href="">Menu item</a></li>
+                                </ul>
+                            </li> -->
+                            <li class="dropdown">
+                                <a type="button" role="button" class="dropdown-toggle" data-toggle="modal" data-target="#myModal" id="about">
+                                   <b> About {{category.name}}</b>  
+                                </a>
+                            </li>
+
+                        </ul>
+                        <ul class="nav navbar-top-links navbar-right">
+                            <li>
+                                <a href="{% url 'it:logout' %}">
+                                    <i class="fa fa-sign-out"></i> Log out
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+                {% if category.background %}
+                    <img src="{{ category.background.url }}" id="bg" alt="" style="width:100%; margin-top:-28px;">
+                {% else %}
+                    <img src="{{category.background_url}}" id="bg" alt="" style="width:100%; margin-top:-28px;">
+                {% endif %}
+{% block body %}
+{% endblock %}
+                <div class="footer">
+                    <div class="pull-right">
+                        Jai  <strong>Radhekrishna</strong> JRK
+                    </div>
+                    <div>
+                        <strong>Copyright</strong> Amon &copy; 2016-2017
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                    <!-- <center> -->
+                        <h4 class="modal-title" id="myModalLabel" style="display: inline;">{{category.name}}</h4> 
+                        <img src="{{category.image.url}}" alt="" class="img-responsive" width="50" height="30" style="display: inline;">    
+                    <!-- </center> -->
+                </div>
+            <div class="modal-body">
+                <h1>
+                    {{category.description|safe}}    
+                </h1>
+                <hr class="divider">
+                <h1>
+                    {{category.description_th|safe}}  
+                </h1>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // $('#about').animate({
+        //     top: 5,
+        //     left: 5
+        // }).fadeIn(2000, function() {
+        //     setTimeout(function() {
+        //     $('#about').fadeOut('fast');
+        //     window.cont++;
+        // }, 300);
+        // }); 
+    </script>
+
+    </body>
+</html>
+

@@ -1,0 +1,277 @@
+<!doctype html>
+<title>TPAC</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title> {% block title %}TPAC | Thai Plaspac{% endblock %}</title>
+<head>
+<!-- Loads the path to the static files -->
+        {% load staticfiles %}
+        <link href="{% static 'IT_Dashboard/css/bootstrap.min.css' %}" rel="stylesheet">
+        <link href="{% static 'IT_Dashboard/font-awesome/css/font-awesome.css' %}" rel="stylesheet">
+        <link href="{% static 'IT_Dashboard/css/animate.css' %}" rel="stylesheet">
+        <link href="{% static 'IT_Dashboard/css/style.css' %}" rel="stylesheet">
+        <link href="{% static 'IT_Dashboard/css/main.css' %}" rel="stylesheet">
+        <link href="{% static 'IT_Dashboard/css/responsive.css' %}" rel="stylesheet">
+        <link href="{% static 'IT_Dashboard/css/component.css' %}" rel="stylesheet">
+        <link href="{% static 'IT_Dashboard/css/tooltip.css' %}" rel="stylesheet">
+        <script src="{% static 'IT_Dashboard/js/classie.js' %}"></script>
+        <script src="{% static 'IT_Dashboard/js/uisearch.js' %}"></script>
+        <script src="{% static 'IT_Dashboard/js/jquery-2.1.1.js' %}"></script>
+        <script src="{% static 'IT_Dashboard/js/jquery-ui-1.10.4.min.js' %}"></script>
+        <script src="{% static 'IT_Dashboard/js/bootstrap.min.js' %}"></script>
+        <link title="timeline-styles" rel="stylesheet" href="https://cdn.knightlab.com/libs/timeline3/latest/css/timeline.css">
+        <link title="timeline-styles" rel="stylesheet" href="https://cdn.knightlab.com/libs/timeline3/latest/css/fonts/font.playfair.css">
+        <script src="https://cdn.knightlab.com/libs/timeline3/latest/js/timeline.js"></script>
+<style type="text/css">
+      .navbar-inverse{
+        border-color:brown;
+        background-color:#57506b; 
+    }
+</style>
+</head>
+
+<body>
+    <div id="wrapper">
+    <nav class="navbar-default navbar-static-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav" id="side-menu">
+                <li class="nav-header">
+                    <div class="dropdown profile-element">
+                        <span>
+                            {% if profile.selfie %}
+                                <img src="{{ profile.selfie.url }}" class="img-responsive img-circle" alt="">
+                            {% elif profile.selfie_url %}
+                                <img src="{{profile.selfie_url}}" class="img-responsive img-circle" alt="">
+                            {% else %}
+                                <img src="{% static 'IT_Dashboard/img/profile.png' %}" alt="">
+                            {% endif %}
+                        </span>
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">{{profile.fullname}}</strong>
+                             </span> <span class="text-muted text-xs block">{{profile.user}} <b class="caret"></b></span> </span> 
+                        </a>
+                        <ul class="dropdown-menu animated fadeInRight m-t-xs" style="background: #1ab394">                    
+                            <li class="divider"></li>
+                            <li><a href="{% url 'it:logout' %}">Logout</a></li>
+                            <li class="divider"></li>
+                            {% if not users and not object%}<li><a href="{% url 'it:profile-update' profile.pk%}">Update Profile</a></li>{%endif%}
+                            <li><a href="{% url 'it:change_password' %}" tabindex="5" class="forgot-password"> Change Password</a></li>
+                            <li class="divider"></li>
+                            <li><a href="{% url 'it:group-flow' %}">My group</a></li>
+                        </ul>
+                    </div>
+                    <div class="logo-element">
+                        TPAC+
+                    </div>
+                </li>
+                <li class="active">
+                    <a href="{% url 'it:index' %}"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboards</span> <!-- <span class="fa arrow"></span> --></a>
+                </li>
+                <li>
+                    <a href="#" onclick="alert('feature for future');"><i class="fa fa-bar-chart-o" ></i> <span class="nav-label">Graphs</span>
+                    <span class="pull-right label label-primary">SPECIAL</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-globe"></i> <span class="nav-label">TPAC Wiki</span><span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        {% if category %}
+                            {% for type in category %}
+                                <li>
+                                    <a href="{% url 'it:category-type' type.id %}">
+                                        <img src="{{ type.image.url }}" width="24" height="24">
+                                        {{type.name|safe}}
+                                    </a>
+                                </li>
+                            {%endfor%}
+                        {%endif%}
+                        {% if request.user.is_superuser %} 
+                            <li class="divider"></li>
+                            <li><a href="{% url 'it:category-add' %}">+ Add Category</a></li>
+                        {% endif %}
+                    </ul>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-edit"></i> <span class="nav-label">Create Topic</span> </a>
+                    <ul class="nav nav-second-level">
+                        <li><a href="{% url 'it:intro-add'%}">Create Introduction</a></li>
+                        <li><a href="{% url 'it:task-add' %}">Create Task</a></li>
+                        <li><a href="{% url 'it:trouble-add' %}">Create Troubleshoot</a></li>
+                    </ul>
+                </li>
+                <li>
+                <li>
+                    <a href="#"><i class="fa fa-user" aria-hidden="true"></i> <span class="nav-label">TPAC USERS</span> </a>
+                    <ul class="nav nav-second-level">
+                        <li><a href="{% url 'it:users-list' %}">Contacts</a></li>
+                        <li><a href="{% url 'it:timeline2' %}">Timeline</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-suitcase" aria-hidden="true"></i><span class="nav-label">Miscellaneous</span><span class="label label-info pull-right">NEW</span></a>
+                    <ul class="nav nav-second-level">
+                        <!-- <li><a href="{% url 'it:timeline2' %}">Timeline v.2</a></li> -->
+                        <li><a href="{% url 'it:map' %}">Street View</a></li>
+                        <li><a href="#" onclick="alert('Under Development')">IT Softwares</a></li>
+                    </ul>
+                </li>
+                
+            </ul>
+
+        </div>
+    </nav>
+
+        <div id="page-wrapper" class="gray-bg">
+        <div class="row border-bottom">
+
+        <nav class="navbar navbar-static-top white-bg navbar-inverse" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> TPAC</a>
+            <form role="search" class="navbar-form-custom">
+                <div class="form-group">
+                    <input type="text" placeholder="The ultimate TPAC guide ..." class="form-control" name="top-search" id="top-search">
+                </div>
+            </form>
+        </div>
+            <ul class="nav navbar-top-links navbar-right">
+                <li>
+                    <span class="m-r-sm text-muted welcome-message">Welcome To Thai Plaspac Dashboard.</span>
+                </li>
+                <li>
+                    <a href="{% url 'it:logout' %}">
+                        <i class="fa fa-sign-out"></i> Log out
+                    </a>
+                </li>
+            </ul>
+
+        </nav>
+        </div>
+        {% block body %}
+        {% endblock %}
+
+         <script type="text/javascript" src="https://www.draw.io/embed2.js?s=flowchart;bpmn"></script>
+    <script type="text/javascript" src="//rf.revolvermaps.com/0/0/6.js?i=5zny582iils&amp;m=7&amp;s=320&amp;c=e63100&amp;cr1=ffffff&amp;f=arial&amp;l=0&amp;bv=90&amp;lx=-420&amp;ly=420&amp;hi=20&amp;he=7&amp;hc=a8ddff&amp;rs=80" async="async"></script>
+    
+        <div class="footer">
+            <div class="pull-right">
+                Jai  <strong>Radhekrishna</strong> JRK
+            </div>
+            <div>
+                <strong>Copyright</strong> Amon &copy; 2016-2017
+            </div>
+        </div>
+
+        </div>
+    </div>
+
+            
+    <!-- Mainly scripts -->
+   
+    <script src="{% static 'IT_Dashboard/js/jquery-ui.custom.min.js' %}"></script>
+    
+    
+    <script src="{% static 'IT_Dashboard/js/plugins/metisMenu/jquery.metisMenu.js' %}"></script>
+    <script src="{% static 'IT_Dashboard/js/plugins/slimscroll/jquery.slimscroll.min.js' %}"></script>
+    
+    <!-- Flot -->
+    <script src="{% static 'IT_Dashboard/js/plugins/flot/jquery.flot.js' %}"></script>
+    <script src="{% static 'IT_Dashboard/js/plugins/flot/jquery.flot.tooltip.min.js' %}"></script>
+    <script src="{% static 'IT_Dashboard/js/plugins/flot/jquery.flot.resize.js' %}"></script>
+    <script src="{% static 'IT_Dashboard/js/plugins/flot/jquery.flot.pie.js' %}"></script>
+    <script src="{% static 'IT_Dashboard/js/plugins/flot/jquery.flot.time.js' %}"></script>
+
+
+    <!-- Custom and plugin javascript -->
+    <script src="{% static 'IT_Dashboard/js/plugins/pace/pace.min.js' %}"></script>
+
+    <script src="{% static 'IT_Dashboard/js/inspinia.js' %}"></script>
+      
+
+    <!-- ChartJS-->
+    <script src="{% static 'IT_Dashboard/js/plugins/chartJs/Chart.min.js' %}"></script>
+    <script src="{% static 'IT_Dashboard/js/chart_dashboard.js' %}"></script>
+    
+    <script type="text/javascript" src="{% static 'IT_Dashboard/js/canvasjs.min.js' %}"></script>
+
+    <script src="{% static 'IT_Dashboard/js/plugins/jsKnob/jquery.knob.js' %} "></script>
+
+   <!-- Input Mask-->
+    <script src="{% static 'IT_Dashboard/js/plugins/jasny/jasny-bootstrap.min.js' %} "></script>
+
+   <!-- Data picker -->
+   <script src="{% static 'IT_Dashboard/js/plugins/datapicker/bootstrap-datepicker.js' %} "></script>
+
+   <!-- NouSlider -->
+   <script src="{% static 'IT_Dashboard/js/plugins/nouslider/jquery.nouislider.min.js' %} "></script>
+
+   <!-- Switchery -->
+   <!-- <script src="{% static 'IT_Dashboard/js/plugins/switchery/switchery.js' %} "></script> -->
+
+    <!-- IonRangeSlider -->
+    <!-- <script src="{% static 'IT_Dashboard/js/plugins/ionRangeSlider/ion.rangeSlider.min.js' %} "></script> -->
+
+    <!-- iCheck -->
+    <script src="{% static 'IT_Dashboard/js/plugins/iCheck/icheck.min.js' %} "></script>
+
+    <!-- MENU -->
+    <!-- Color picker -->
+    <!-- <script src="{% static 'IT_Dashboard/js/plugins/colorpicker/bootstrap-colorpicker.min.js' %} "></script> -->
+
+    <!-- Image cropper -->
+    <!-- <script src="{% static 'IT_Dashboard/js/plugins/cropper/cropper.min.js' %} "></script> -->
+
+<!--     <script src="{% static 'IT_Dashboard/js/plugins/peity/jquery.peity.min.js' %} "></script>
+    <script src="{% static 'IT_Dashboard/js/demo/peity-demo.js' %} "></script> -->
+    <!-- <script type="text/javascript" src="https://www.draw.io/embed2.js?s=flowchart"></script> -->
+    <script>
+    $( document ).ready(function() {
+        // new UISearch( document.getElementById( 'sb-search' ) );
+        var IDLE_TIMEOUT = 60; //seconds
+        var _idleSecondsCounter = 0;
+        document.onclick = function() {
+            _idleSecondsCounter = 0;
+        };
+        document.onmousemove = function() {
+            _idleSecondsCounter = 0;
+        };
+        document.onkeypress = function() {
+            _idleSecondsCounter = 0;
+        };
+        window.setInterval(CheckIdleTime, 1000);
+
+        function CheckIdleTime() {
+            _idleSecondsCounter++;
+            var oPanel = document.getElementById("SecondsUntilExpire");
+            if (oPanel)
+                oPanel.innerHTML = (IDLE_TIMEOUT - _idleSecondsCounter) + "";
+            if (_idleSecondsCounter >= IDLE_TIMEOUT) {
+                console.log("Time expired!");
+                $('.navbar-minimalize').click();
+            }
+        }
+
+         $('#lightVersion').click(function(event) {
+                event.preventDefault()
+                $('#ibox-content').removeClass('ibox-content');
+                $('#vertical-timeline').removeClass('dark-timeline');
+                $('#vertical-timeline').addClass('light-timeline');
+            });
+
+            $('#darkVersion').click(function(event) {
+                event.preventDefault()
+                $('#ibox-content').addClass('ibox-content');
+                $('#vertical-timeline').removeClass('light-timeline');
+                $('#vertical-timeline').addClass('dark-timeline');
+            });
+
+            $('#leftVersion').click(function(event) {
+                event.preventDefault()
+                $('#vertical-timeline').toggleClass('center-orientation');
+            });
+    });
+    
+    </script>
+
+</body>
+</html>

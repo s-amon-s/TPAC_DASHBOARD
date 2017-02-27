@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% load staticfiles %}
+  <title>{{introduction.title}}</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="author" content="buckymaler.com">
+  <link rel="stylesheet" href="{% static 'mom/css/style.css' %}"> <!-- Resource style -->
+
+  <link href="{% static 'mom/css/tooltip.css' %}" rel="stylesheet">
+  <link href="{% static 'mom/font-awesome/css/font-awesome.css' %}" rel="stylesheet">
+  <link title="timeline-styles" rel="stylesheet" href="https://cdn.knightlab.com/libs/timeline3/latest/css/timeline.css">
+  <script src="https://cdn.knightlab.com/libs/timeline3/latest/js/timeline.js"></script>
+
+  <link href="{% static 'mom/css/krowd.css' %}" rel="stylesheet">
+  <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="{% static 'mom/css/reset.css' %}"> <!-- CSS reset -->
+  <script src="{% static 'mom/js/modernizr.js' %}"></script> <!-- Modernizr -->
+    
+</head>
+<body>
+<!-- notification for small viewports and landscape oriented smartphones -->
+</head>
+<body>
+
+<!-- <div class="device-notification">
+  <a class="device-notification--logo" href="#0">
+    <img src="{% static 'mom/img/logo.png' %}" alt="Global">
+    <p>Crowd Thailand</p>
+  </a>
+  <p class="device-notification--message">Crowd Thailand Minutes of the Meeting</p>
+</div> -->
+
+<div class="perspective effect-rotate-left">
+  <div class="container"><div class="outer-nav--return"></div>
+    <div id="viewport" class="l-viewport">
+      <div class="l-wrapper">
+        <header class="header">
+          <a class="header--logo hvr-float-shadow" href="{% url 'main:menu' 1 %}">
+            <img src="{% static 'mom/img/mom.png' %}" alt="Jai Radhekrishna" width="118">
+            <!-- <p>Krowd Ltd.</p> -->
+          </a>
+          <!-- <button class="header--cta cta">Contact Us</button> -->
+          <div class="header--nav-toggle">
+            <span></span>
+          </div>
+        </header>
+        <nav class="l-side-nav">
+          <ul class="side-nav">
+            <!-- <li class="is-active"><span>{{mom.first}}</span></li> -->
+            {% for item in mom %}
+              <li><span class="hvr-float-shadow">{{item.navbar_title}}</span></li>
+            {%endfor%}
+          </ul>
+        </nav>
+        
+{% block body %}
+{% endblock %}
+
+      </div>
+    </div>
+  </div>
+  <ul class="outer-nav">
+    <!-- <li class="is-active"><span>{{mom.first}}</span></li> -->
+    {% for item in mom %}
+      <li><span>{{item.navbar_title}}</span></li>
+    {%endfor%}    
+  </ul>
+</div>
+<input type="hidden" name="id_jquery" id="id_jquery" value="{% static 'mom/js/vendor/jquery-2.2.4.min.js' %}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="'+ document.getElementById('id_jquery').value +'"><\/script>')</script>
+<script src="{% static 'mom/js/functions-min.js' %}"></script>
+<script src="{% static 'mom/js/jquery-2.1.4.js.js' %}"></script>
+<script src="{% static 'mom/js/jquery.mobile.custom.min.js.js' %}"></script>
+<script src="{% static 'mom/js/main.js' %}"></script>
+<script type="text/javascript">
+    $.ajax({
+    url: "/mom/get/allMoms/",
+    dataType : 'json',
+    type: "GET",
+    success: function(data){
+        for (var i = data.length - 1; i >= 0; i--) {
+          console.log(data)
+          var additionalOptions = {
+                    start_at_end: false,
+                    default_bg_color: data[i]['fields']["background_color"],
+                    timenav_height: 50,
+                    hash_bookmark: true,
+                    timenav_position:"bottom",
+            }
+            timeline = new TL.Timeline('timeline-embed'+data[i]['pk'],
+              data[i]['fields']["background_frame_url"],
+              additionalOptions
+            );
+        }
+        var $head = $("head");
+        var $headlinklast = $head.find("link[rel='stylesheet']:last");
+        var linkElement = "<link rel='stylesheet' href='https://cdn.knightlab.com/libs/timeline3/latest/css/fonts/"+data[0]['fields']["font"]+"' type='text/css' media='screen'>";
+
+        if ($headlinklast.length){
+         $headlinklast.after(linkElement);
+        }
+        else {
+         $head.append(linkElement);
+        }
+
+      }      
+    });
+
+          $("body").keydown(function(e) {
+              console.log('here'.e.keycode)
+              if(e.keyCode == 37) { // left
+                timeline.goToPrev();
+              }
+              else if(e.keyCode == 39) { // right
+                timeline.goToNext();
+              }
+            });
+      }  
+  </script>
+</body>
+</html>

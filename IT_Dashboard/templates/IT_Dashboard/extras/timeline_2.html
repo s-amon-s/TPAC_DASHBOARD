@@ -1,0 +1,87 @@
+{% extends 'IT_Dashboard/dashboard_base.html' %}
+{% block title %}ProWide | HOME {% endblock %}
+
+
+{% block body %}
+{% load staticfiles %}
+
+        <div class="row wrapper border-bottom white-bg page-heading">
+            <div class="col-lg-9">
+                <h2>Contacts</h2> 
+                    <ol class="breadcrumb">
+                        <li>
+                            <a href="{% url 'it:index'%}">Home</a>
+                        </li>
+                        <li class="active">
+                            <strong>Users Timeline</strong>
+                        </li>
+                    </ol>
+                </div>
+            <div class="col-lg-2">
+
+            </div>
+        </div>
+     {% if users %}
+        <div class="wrapper wrapper-content">
+            <div class="row animated fadeInRight">
+                <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                    <div class="text-center float-e-margins p-md">
+                        <h2>TPAC Users Timeline</h2>
+                    </div>
+                    <div class="ibox-content" id="ibox-content">
+
+                        <div id="vertical-timeline" class="vertical-container dark-timeline center-orientation">
+
+            {% for user in users %}
+           
+ 
+                            <div class="vertical-timeline-block">
+                                <div class="vertical-timeline-icon navy-bg">
+                                    <!-- <i class="fa fa-briefcase"></i> -->
+                                    <img alt="image" class="img-circle m-t-xs img-responsive" src="{{ user.selfie.url }}">
+                                </div>
+
+                                <div class="vertical-timeline-content">
+                                    <h3><strong>{{user.fullname}}</strong></h3>
+                                    <p><i class="fa fa-map-marker"></i> {{user.house_location}}</p>
+                                    <address>
+                                        <div class="m-t-xs font-bold"><strong>Thai Plaspac, Plc.</strong></div>
+                                        <i>{{user.department}}&nbsp;{{user.designation}}</i><br>
+                                        TPAC ID: {{user.id}}<br>
+                                    </address>
+                                    <address>
+                                        Work Location: {{user.work_at}}<br>
+                                        IP: {{user.ip}}<br>
+                                        <abbr title="Phone">Tel:</abbr>  ({{user.table}})
+                                    </address>
+                                    <a href="{% url 'it:userdetails' user.pk %}" class="btn btn-sm btn-primary"> More info</a>
+                                    <span class="vertical-date">
+                                        {% with now as today %}
+                                    {{ user.joined_tpac|timesince:today }}
+                                    {% endwith %} <br/>
+                                        <small>{{user.joined_tpac}}</small>
+                                    </span>
+                                </div>
+                            </div>
+                 {% endfor %} 
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+{% else %}
+        <div class="col-sm-12 container" align="center" style="margin-top:18%;">
+            <br>
+        <a href="/admin">
+        <button type="button" class="btn btn-success">
+            <span class="glyphicon glyphicon-plus"></span><br>&nbsp; List Emply, Add Contacts
+            <p>(*require admin)</p>
+        </button>
+        </a>
+        </div>
+{% endif %} 
+
+{% endblock %}

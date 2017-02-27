@@ -1,0 +1,135 @@
+{% extends 'IT_Dashboard/dashboard_base.html' %}
+{% block title %}ProWide | HOME {% endblock %}
+
+
+{% block body %}
+{% load staticfiles %}
+<link title="timeline-styles" rel="stylesheet" href="https://cdn.knightlab.com/libs/timeline3/latest/css/timeline.css">
+<link title="timeline-styles" rel="stylesheet" href="https://cdn.knightlab.com/libs/timeline3/latest/css/fonts/font.playfair.css">
+<script src="https://cdn.knightlab.com/libs/timeline3/latest/js/timeline.js"></script>
+ 
+        <div class="row wrapper border-bottom white-bg page-heading">
+            <div class="col-lg-9">
+                <h2>Contacts</h2> 
+                    <ol class="breadcrumb">
+                        <li>
+                            <a href="{% url 'it:index'%}">Home</a>
+                        </li>
+                        <li class="active">
+                            <strong>All Users</strong>
+                        </li>
+                    </ol>
+                </div>
+                <div class="col-lg-3" style="margin-top:12px;">
+                    <a href="#" onclick="loadTimeline()" class="pull-right" id="timelineText"><span class="label label-info"><i class="fa fa-clock-o"></i>&nbsp;&nbsp; LOAD TIMELINE</span></a>
+                </div>
+            </div>
+        <div class="wrapper wrapper-content animated fadeInRight">
+<div class="se-pre-con"></div>
+<div style="margin-top:40px"></div>    
+        <div class="row">
+        {{profile}}
+        {% if users %}
+            {% for user in users %}
+                <div class="col-lg-4">
+                    <div class="contact-box">
+                        <a href="{% url 'it:userdetails' user.pk %}">
+                        <div class="col-sm-4">
+                            <div class="text-center">
+                                {% if user.selfie %}
+                                    <img src="{{ user.selfie.url }}" alt="image" class="img-circle m-t-xs img-responsive">
+                                {% elif user.selfie_url %}
+                                    <img alt="image" class="img-circle m-t-xs img-responsive" src="{{user.selfie_url}}">
+                                {% else %}
+                                    <img alt="image" class="img-circle m-t-xs img-responsive" src="{% static 'IT_Dashboard/img/profile.png' %}">
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-sm-8">
+                            <h3><strong>{{user.fullname}}</strong></h3>
+                            <p><i class="fa fa-map-marker"></i> {{user.house_location}}</p>
+                            <address>
+                                <div class="m-t-xs font-bold"><strong>Thai Plaspac, Plc.</strong></div>
+                                <i>{{user.department}}&nbsp;{{user.designation}}</i><br>
+                                TPAC ID: {{user.id}}<br>
+                            </address>
+                            <address>
+                                Work Location: {{user.work_at}}<br>
+                                IP: {{user.ip}}<br>
+                                <abbr title="Phone">Tel:</abbr>  ({{user.table}})
+                            </address>
+                        </div>
+                        <div class="clearfix"></div>
+                            </a>
+                    </div>
+                </div>
+            {% endfor %} 
+        {% else %}
+            <div class="col-sm-12 container" align="center" style="margin-top:18%;">
+                <br>
+                    <a href="/it/category/introduction/add/">
+                        <button type="button" class="btn btn-success">
+                            <span class="glyphicon glyphicon-plus"></span><br>&nbsp; List Emply, Add Contacts
+                            <p>(*require admin)</p>
+                        </button>
+                    </a>
+                </div>
+        {% endif %}        
+        </div>
+        </div>
+<div id='timeline-embed' style="width:100%;height:700px"  style="display:none"></div>
+<script type="text/javascript">
+function loadTimeline(){
+    $('html, body').animate({
+            scrollTop: $("#timeline-embed").offset().top
+    }, 1500);
+    $.ajax({
+    url: "/it/get/allUserListForTimeline/",
+    dataType : 'json',
+    type: "GET",
+    success: function(data){
+        var timelineUSer = {};
+        var media = {};
+        var text = {};
+        var title = {};
+        var events = [];
+        media['url'] = "http://www.chiangmai-mail.com/465/pictures/king1-465-1.jpg";
+        media['caption'] = "His Majesty showering blessing to his people";
+        media['credit'] = "<a href='http://www.chiangmai-mail.com/465/king2014.shtml'>Chiangmai-Mail</a>";
+        text['headline'] = "Bhumibol Adulyadej <br/> 1950 - 2016";
+        text['text'] = "<p>His Majesty King Bhumibol Adulyadej conferred with the title King Bhumibol the Great in 1987, was the ninth monarch of Thailand from the Chakri Dynasty as Rama IX </p>";
+        title['media'] = media;
+        title['text'] = text;
+        for (var i = data.length - 1; i >= 0; i--) {
+            var media = {};
+            var start_date = {};
+            var text = {};
+            var item  = {};
+            media['url'] = data[i]['fields']["selfie"]==""?data[i]['fields']["selfie_url"]==""?'/static/IT_Dashboard/profile.png':data[i]['fields']["selfie_url"]:'/media/'+data[i]['fields']["selfie"];
+            media['caption'] = data[i]['fields']["designation"]+' who is incharge of '+ data[i]['fields']["is_incharge_of"];
+            media['credit'] = "~<a href='/it/users/"+data[i]['pk']+"/'>"+data[i]['fields']["nickname"]+"</a>";
+            text['headline'] = '<a href="/it/users/"'+data[i]['pk']+'"/">'+data[i]['fields']["fullname"]+'</a><br/>'+ data[i]['fields']["id"];
+            text['text'] = '<p><i class="fa fa-map-marker"></i>'+data[i]['fields']["house_location"]+'</p><address><div class="m-t-xs font-bold"><strong>Thai Plaspac, Plc.</strong></div><i>'+data[i]['fields']["department"]+'&nbsp;'+data[i]['fields']["designation"]+'</i><br>TPAC ID: '+data[i]['fields']["id"]+'<br> </address><address>Work Location: '+data[i]['fields']["work_at"]+'<br>IP:'+data[i]['fields']["ip"]+'<br><abbr title="Phone">Tel:</abbr>('+data[i]['fields']["table"]+')</address>';
+            a = new Date(data[i]['fields']["joined_tpac"]);
+            start_date['day']= a.getDate();
+            start_date['month']= a.getMonth()+1;     
+            start_date['year']= a.getFullYear();                                        
+            item['media'] = media;
+            item['start_date'] = start_date;
+            item['text'] = text;
+            events.push(item);
+        }
+        timelineUSer['title'] = title;
+        timelineUSer['events']= events;
+        var options = {
+            hash_bookmark: true,
+            default_bg_color:'#f2d8a5',
+            timenav_position:'bottom',
+            initial_zoom: 12
+        };
+        timeline = new TL.Timeline('timeline-embed',timelineUSer,options);
+    }
+    });
+}
+  </script>
+{% endblock %}

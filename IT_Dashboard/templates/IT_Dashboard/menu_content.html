@@ -1,0 +1,160 @@
+{% extends 'IT_Dashboard/category_base.html' %}
+{% block title %}TPAC | HOME {% endblock %}
+{% block body %}
+{% load staticfiles %}
+         <section>
+                <div id="sb-search" class="sb-search">
+                    <form>
+                        <input class="sb-search-input" placeholder="Enter your search term..." type="search" value="" name="search" id="search">
+                        <input class="sb-search-submit" type="submit" value="">
+                        <span class="sb-icon-search"></span>
+                    </form>
+                </div>
+        </section>    
+        <input type="hidden" id="menu" value="{{menuID}}">
+        <input type="hidden" id="cid" value="{{category.pk}}">     
+        <div style="margin-top:80px"></div>
+        <div id='timeline-menu' style="width:100%;height:700px"  style="display:none"></div> 
+<!-- {% if not category.introduction_set or not category.troubleshoot_set.count or not category.task_set.count %} -->
+    <div class="col-sm-12 container" align="center">
+        <br>
+            <a href="/it/category/{{menuID}}/add">
+                <button type="button" class="btn btn-danger" style="background-color: #42b7ca">
+                    <span class="glyphicon glyphicon-plus"></span><br>&nbsp; Add {{menuID}} to the list
+                </button>
+            </a>
+        <br>
+    </div>
+     <!-- <div id='timeline-embed' style="width:100%;height:700px"  style="display:none"></div> -->
+<!-- {% else %}
+        <div style="margin-top:80px"></div>
+        <div id='timeline-menu' style="width:100%;height:700px"  style="display:none"></div>
+{% endif %}  -->
+
+<script type="text/javascript">
+    // function loadTimeline(){
+
+ //    $('html, body').animate({
+ //        scrollTop: $("#timeline-embed").offset().top
+ //    }, 1500);
+   $(document).ready(function() {
+        new UISearch(document.getElementById('sb-search'));
+    var url_menu = "/it/get/"+$('#cid').val()+"/"+$('#menu').val()+"/";
+    console.log(url_menu);
+
+    $.ajax({
+    url: url_menu,
+    dataType : 'json',
+    type: "GET",
+    success: function(data){
+        console.log(data)
+        var timelineUSer = {};
+        var media = {};
+        var text = {};
+        var title = {};
+        var events = [];
+        media['url'] = "http://www.chiangmai-mail.com/465/pictures/king1-465-1.jpg";
+        media['caption'] = "His Majesty showering blessing to his people";
+        media['credit'] = "<a href='http://www.chiangmai-mail.com/465/king2014.shtml'>Chiangmai-Mail</a>";
+        text['headline'] = "Bhumibol Adulyadej <br/> 1950 - 2016";
+        text['text'] = "<p>His Majesty King Bhumibol Adulyadej conferred with the title King Bhumibol the Great in 1987, was the ninth monarch of Thailand from the Chakri Dynasty as Rama IX </p>";
+        title['media'] = media;
+        title['text'] = text;
+        for (var i = data.length - 1; i >= 0; i--) {
+            var media = {};
+            var start_date = {};
+            var end_date = {};
+            var text = {};
+            var item  = {};
+    console.log(data[i]);
+    if (data[i]['fields']["video_url"]==""){
+    media['url'] = data[i]['fields']["image"]==""?data[i]['fields']["image_url"]:'/media/'+data[i]['fields']["image"];
+    }else{
+     media['url'] = data[i]['fields']["video_url"]    
+    }
+            media['caption'] = data[i]['fields']["created_by"]+' has uploaded this on '+ data[i]['fields']["created_on"];
+            media['credit'] = "Author ~ <a href='/it/users/"+data[i]['fields']['created_by']+"/'>"+data[i]['fields']['created_by']+"</a>";
+            text['headline'] = '<a href="/it/category/'+$('#menu').val()+'/'+data[i]['pk']+'/detail/">'+data[i]['fields']["name"]+' - '+data[i]['fields']["name_th"]+'</a>';
+           
+            var content = '<u><b>Is Important <i>(สำคัญ)</i></b></u> ? - ';
+            content += data[i]['fields']["is_important"] == true ? 'This topic Is <b><i>Important</i></b>' : 'This topic Is <b><i>Not</i></b> Important' ;
+            content += '<br><br><u><b>Who is expert and incharge <i>(ผู้เเชียชาญ)</i></b></u> ? - ';
+            for (var j = data[i]['fields']["is_expert_and_incharge"].length - 1; j >= 0; j--) {
+                content += "<a href='/it/users/"+data[i]['fields']["is_expert_and_incharge"][j]+"/'>";
+                content += '<i class="fa fa-user"></i>';
+                getUserName(data[i]['fields']["is_expert_and_incharge"][j],function(output){ 
+                    content += output;
+                    content += '</a>';
+                    content+='&nbsp;&nbsp;';
+                    console.log(content);
+                });                 
+             }
+            if(data[i]['fields']["cause"] || data[i]['fields']["cause_th"]){
+                content+= 'Cause: '+ data[i]['fields']["cause"] + ' - '+data[i]['fields']["cause_th"];
+            }
+            if(data[i]['fields']["occurrence"]){
+                content+= 'Occurrence: '+ data[i]['fields']["occurrence"];
+            }
+            if(data[i]['fields']["has_been_solved"]){
+                content+= 'Has Been Solved? : '+ data[i]['fields']["has_been_solved"];
+            }
+            text['text'] = content;
+            a = new Date(data[i]['fields']["start_date"]);
+            b = new Date(data[i]['fields']["end_date"]);
+           
+            start_date['day']= a.getDate();
+            start_date['month']= a.getMonth()+1;     
+            start_date['year']= a.getFullYear();                                        
+            end_date['day']= b.getDate();
+            end_date['month']= b.getMonth()+1;     
+            end_date['year']= b.getFullYear();
+            item['media'] = media;
+            item['start_date'] = start_date;
+            item['text'] = text;
+            events.push(item);
+        }
+        timelineUSer['title'] = title;
+        timelineUSer['events']= events;
+        var options = {
+            hash_bookmark: true,
+            default_bg_color:'#f2d8a5',
+            timenav_position:'top',
+            initial_zoom: 12
+        };
+        timeline = new TL.Timeline('timeline-menu',timelineUSer,options);
+
+        $("body").keydown(function(e) {
+            console.log(e.keyCode)
+              if(e.keyCode == 37) { // left
+                timeline.goToPrev();
+              }
+              else if(e.keyCode == 39) { // right
+                timeline.goToNext();
+              }
+              else if(e.keyCode == 83) { // home
+                timeline.goToStart();
+              }
+              else if(e.keyCode == 69) { // end
+                timeline.goToEnd();
+              }
+            });
+    }
+    });
+});
+
+function getUserName(id,callback){
+    var fullname = '';
+    $.ajax({
+        url: '/it/get/UserById/'+id,
+        type: "GET",
+        async: false,
+        success: function(data){
+            console.log(data);
+            callback(data);
+        }
+    });
+}
+
+</script>
+
+{% endblock %}
