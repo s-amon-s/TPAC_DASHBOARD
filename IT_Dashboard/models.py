@@ -56,7 +56,7 @@ class Category(Auditable_Category):
 	def __str__(self):
 		return self.name
 
-		
+
 reversion.register(Category)
 
 class Introduction(Auditable_Introduction):
